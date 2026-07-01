@@ -1,0 +1,27 @@
+name: Practical 3 - Automated Testing
+
+on:
+  push:
+    paths:
+      - 'Prac3/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Run automated tests
+        run: |
+          cd Prac3
+          pytest
