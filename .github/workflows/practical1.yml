@@ -1,0 +1,21 @@
+name: Initial GitHub Actions Workflow #1
+
+on:
+  push:
+
+jobs:
+  hello-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Start Message
+        run: echo "Workflow Started"
+
+      - name: Print Runner Information
+        run: echo "Running on Ubuntu Runner"
+
+      - name: Print Greeting
+        run: echo "Hello Ashish"
+
+      - name: Print Completion Message
+        run: echo "Workflow Completed"
