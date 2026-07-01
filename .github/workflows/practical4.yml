@@ -1,0 +1,18 @@
+name: Practical 4 - Docker Build
+
+on:
+  push:
+    paths:
+      - 'Prac4/**'
+      - '.github/workflows/practical4.yml'
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t myapp ./Prac4
