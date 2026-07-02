@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: ci-cd-service
+
+spec:
+  selector:
+    app: ci-cd-demo
+
+  ports:
+  - port: 80          # Port exposed by the Service inside the cluster
+    targetPort: 80    # Port on the container/Pod where the application is running
+
+  type: ClusterIP     # Makes the service accessible only within the Kubernetes cluster
