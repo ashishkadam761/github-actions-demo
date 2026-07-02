@@ -1,60 +1,49 @@
-name: Complete CI/CD Pipeline          # Name of the GitHub Actions workflow
+name: Complete CI/CD Pipeline
 
 on:
-  push:                                # Trigger workflow when code is pushed
+  push:
     paths:
-      - 'Prac10/**'                    # Run only if files inside Prac10 folder change
+      - 'Prac10/**'
 
 jobs:
 
-  test:                                # First job: Run tests
-    runs-on: ubuntu-latest             # Use an Ubuntu virtual machine
+  test:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4      # Download repository code to the runner
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5  # Install Python on the runner
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'       # Use Python version 3.11
+          python-version: '3.11'
 
       - run: pip install -r Prac10/requirements.txt
-        # Install project dependencies
 
       - run: |
-          cd Prac10                    # Move into project directory
-          pytest                       # Run all test cases
+          cd Prac10
+          pytest
 
-  docker:                              # Second job: Build and push Docker image
-
-    needs: test                        # Run this job only if test job succeeds
-
-    runs-on: ubuntu-latest             # Use an Ubuntu virtual machine
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4      # Download repository code again
+      - uses: actions/checkout@v4
 
-      - uses: docker/login-action@v3   # Login to Docker Hub
+      - uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}   # Docker Hub username from GitHub Secrets
-          password: ${{ secrets.DOCKER_PASSWORD }}   # Docker Hub password/token from GitHub Secrets
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build Docker image
-      - run: |
-          docker build \
-            -t ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest \
-            ./Prac10                   # Use Prac10 folder as build context
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest ./Prac10
 
-      # Push image to Docker Hub
-      - run: |
-          docker push \
-            ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
 
-  kubernetes:                          # Third job: Kubernetes deployment stage
-
-    needs: docker                      # Run only if Docker job succeeds
-
-    runs-on: ubuntu-latest             # Use an Ubuntu virtual machine
+  kubernetes:
+    needs: docker
+    runs-on: ubuntu-latest
 
     steps:
       - run: echo "Deployment manifest prepared successfully"
-        # Demonstration deployment step
