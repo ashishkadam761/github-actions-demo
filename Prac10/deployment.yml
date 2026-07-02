@@ -1,22 +1,22 @@
-apiVersion: apps/v1          # Use the Deployment API version
-kind: Deployment             # Create a Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
 
 metadata:
-  name: ci-cd-demo           # Name of the Deployment
+  name: cicd-demo
 
 spec:
-  replicas: 2                # Maintain 2 identical Pods at all times
+  replicas: 2
 
   selector:
     matchLabels:
-      app: ci-cd-demo        # Manage Pods having this label
+      app: cicd-demo
 
   template:
     metadata:
       labels:
-        app: ci-cd-demo      # Label assigned to newly created Pods
+        app: cicd-demo
 
     spec:
       containers:
-      - name: ci-cd-container               # Name of the container inside the Pod
-        image: ashishkadam720/cicd-demo:latest   # Docker image to pull from Docker Hub
+      - name: cicd-demo-container
+        image: ashishkadam720/cicd-demo:latest
