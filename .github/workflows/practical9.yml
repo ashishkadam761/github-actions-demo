@@ -1,11 +1,24 @@
-name: Test Workflow
+name: Practical 9 - Manual Workflow Dispatch
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'Prac9/**'
+      - '.github/workflows/practical9.yml'
 
 jobs:
-  test:
+  manual-job:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "Workflow detected successfully"
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Execute Python Program
+        run: python Prac9/app.py
