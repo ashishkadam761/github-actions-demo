@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: github-actions-demo
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: github-actions-demo
+
+  template:
+    metadata:
+      labels:
+        app: github-actions-demo
+
+    spec:
+      containers:
+      - name: github-actions-container
+        image: ashishkadam720/myapp:latest
+
+        ports:
+        - containerPort: 80

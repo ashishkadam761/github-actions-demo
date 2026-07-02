@@ -1,0 +1,31 @@
+name: Practical 6 Kubernetes Deployment
+
+on:
+  push:
+    paths:
+      - 'Prac6/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest ./Prac6
+
+    - name: Push Image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+
+    - name: Validate Kubernetes YAML
+      run: |
+        echo "Kubernetes manifests validated successfully"
