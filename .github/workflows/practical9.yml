@@ -1,0 +1,20 @@
+name: Practical 9 - Manual Workflow Dispatch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  manual-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Execute Python Program
+        run: python Prac9/app.py
