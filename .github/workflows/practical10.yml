@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'Prac10/**'
+      - '.github/workflows/practical10.yml'
 
 jobs:
 
