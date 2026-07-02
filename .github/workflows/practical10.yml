@@ -18,41 +18,43 @@ jobs:
           python-version: '3.11'       # Use Python version 3.11
 
       - run: pip install -r Prac10/requirements.txt
-                                      # Install project dependencies
+        # Install project dependencies
 
       - run: |
-          cd Prac10                   # Move into project directory
-          pytest                      # Run all test cases
+          cd Prac10                    # Move into project directory
+          pytest                       # Run all test cases
 
-  docker:                             # Second job: Build and push Docker image
+  docker:                              # Second job: Build and push Docker image
 
-    needs: test                       # Run this job only if test job succeeds
+    needs: test                        # Run this job only if test job succeeds
 
-    runs-on: ubuntu-latest            # Use an Ubuntu virtual machine
+    runs-on: ubuntu-latest             # Use an Ubuntu virtual machine
 
     steps:
-      - uses: actions/checkout@v4     # Download repository code again
+      - uses: actions/checkout@v4      # Download repository code again
 
-      - uses: docker/login-action@v3  # Login to Docker Hub
+      - uses: docker/login-action@v3   # Login to Docker Hub
         with:
           username: ${{ secrets.DOCKER_USERNAME }}   # Docker Hub username from GitHub Secrets
           password: ${{ secrets.DOCKER_PASSWORD }}   # Docker Hub password/token from GitHub Secrets
 
+      # Build Docker image
       - run: |
-          docker build \              # Build Docker image
-          -t ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest \   # Assign image name and tag
-          ./Prac10                    # Use Prac10 folder as build context
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest \
+            ./Prac10                   # Use Prac10 folder as build context
 
+      # Push image to Docker Hub
       - run: |
-          docker push \               # Push image to Docker Hub
-          ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
+          docker push \
+            ${{ secrets.DOCKER_USERNAME }}/cicd-demo:latest
 
-  kubernetes:                         # Third job: Kubernetes deployment stage
+  kubernetes:                          # Third job: Kubernetes deployment stage
 
-    needs: docker                     # Run only if Docker job succeeds
+    needs: docker                      # Run only if Docker job succeeds
 
-    runs-on: ubuntu-latest            # Use an Ubuntu virtual machine
+    runs-on: ubuntu-latest             # Use an Ubuntu virtual machine
 
     steps:
       - run: echo "Deployment manifest prepared successfully"
-                                      # Demonstration deployment step
+        # Demonstration deployment step
